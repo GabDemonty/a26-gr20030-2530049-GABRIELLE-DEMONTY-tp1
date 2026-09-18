@@ -39,6 +39,7 @@ def calculer_demi_vie(k):
 
     return demi_vie
 
+
 def convertir_concentration (valeur, unite_source, unite_cible):
     '''
     Convertit une concentration entre mg/L et µg/mL.
@@ -51,11 +52,32 @@ def convertir_concentration (valeur, unite_source, unite_cible):
     Retour :
     float, valeur de la concentration convertie
     '''
+    if valeur < 0:
+        raise ValueError("La valeur de la concentration doit être positive ou nulle.")
     if unite_source == "mg/L" and unite_cible == "µg/mL":
-        return valeur
-
+        return valeur * 1000
     elif unite_source == "µg/mL" and unite_cible == "mg/L":
-        return valeur
+        return valeur / 1000
+    else:
+        raise ValueError("Conversion non supportée.")
 
-    else: 
-        raise ValueError ("Unités de concentation non reconnues.")
+    def evaluer_niveau(concentration, seuil_min, seuil_max_):
+        '''
+        Détermine le niveau d'une concentration selon deu seuils.
+        
+        Paramètres : 
+        concentration : float, concentration à évaluer
+        seuil_min : float, seuil minimum de la zone optimale
+        seuil_max : float, seuil maximum de la zone optimale
+
+        Retour : 
+        str, niveau de la concentration
+        '''
+        if seuil_min >= seuil_max_:
+            raise ValueError("seuil_min doit être < au seuil_max.")
+        if concentration < seuil_min:
+            return 'INSUFFISANT'
+        elif concentration <= seuil_max:
+            return 'OPTIMAL'
+        else:
+            return 'TOXIQUE / CRITIQUE'
